@@ -1,0 +1,7 @@
+parameters:
+    hello_world: "Hello world!"
+
+services:
+    product_repository:
+        class: Foo\Repository\ProductRepository
+        arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
