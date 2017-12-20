@@ -1,4 +1,4 @@
-# Understand the new "src" folder (since 1.7.0)
+# Understand the new "src" folder
 
 The main idea when doing the 1.7 release is to use Symfony as a replacement for our own PrestaShop framework.
 
@@ -109,7 +109,7 @@ This folder contains all adapters we use for the migration of Back Office, using
 ```
 
 You should create file here only if you have an hard bound with legacy framework when migrating to Symfony, and
-you can't refactor it easily. For instance, take a look at `PhpParameters` class in "Configuration: this class doesn't rely on
+you can't refactor it easily. For instance, take a look at `PhpParameters` class in "Configuration": this class doesn't rely on
 Context or specific constants but on the configuration files of PrestaShop legacy framework. As theses files are shared by both front and back, we couldn't manage to refactor it and remove it now.
 
 ## PrestaShopBundle
