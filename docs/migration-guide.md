@@ -413,7 +413,9 @@ Some hooks are directly rendered in templates, because PrestaShop developers wan
 # Deletions
 
 Now everything is migrated, refactored, extracted to specific classes and works like a charm, it's time to remove the migrated parts:
+
 * delete the old controller.
 * delete the old templates (delete `admin-dev/themes/default/template/controller/{name}` folder.
+* delete the related "legacy tests".
 
 > NEVER call the legacy controller inside the new controller, it's a no go, no matter the reason!
