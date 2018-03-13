@@ -2,22 +2,24 @@
     "name": "mickaelandrieu/ps_test",
     "description": "Test module.",
     "authors": [
-      {
-        "name": "Mickaël Andrieu",
-        "email": "mickael.andrieu@solvolabs.com"
-      }
+        {
+            "name": "Micka\u00ebl Andrieu",
+            "email": "mickael.andrieu@solvolabs.com"
+        }
     ],
     "require": {
-      "php": ">=5.6.0"
+        "php": ">=5.6.0"
     },
     "autoload": {
-      "psr-4": {"Foo\\": "src/"},
-      "exclude-from-classmap": [
-      ]
+        "psr-4": {
+            "Foo\\": "src/"
+        },
+        "exclude-from-classmap": []
     },
     "config": {
-      "preferred-install": "dist"
+        "preferred-install": "dist"
     },
-    "type": "prestashop-module"
-  }
-  
+    "type": "prestashop-module",
+    "author": "PrestaShop",
+    "license": "AFL-3.0"
+}

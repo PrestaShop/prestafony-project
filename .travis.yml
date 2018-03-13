@@ -1,0 +1,15 @@
+language: python
+
+install:
+  - pip install --user proselint
+
+script:
+  - proselint docs/
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: $TRAVIS_BUILD_DIR/../website/public
+  on:
+    branch: master

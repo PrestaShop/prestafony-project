@@ -1,7 +1,13 @@
 parameters:
     hello_world: "Hello world!"
 
-services:
+services:    
     product_repository:
         class: Foo\Repository\ProductRepository
         arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
+
+    # Form customization exemple
+    product_seo_description:
+        class: Foo\Form\ProductSeoField
+        tags:
+            - { name: 'prestashop.field_provider'}
