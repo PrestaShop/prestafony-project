@@ -20,11 +20,17 @@ class ComposerStaticInit8a4cdd99def997146067b1eba823ce8c
         ),
     );
 
+    public static $classMap = array (
+        'Foo\\Form\\ProductSeoField' => __DIR__ . '/../..' . '/src/Form/ProductSeoField.php',
+        'Foo\\Repository\\ProductRepository' => __DIR__ . '/../..' . '/src/Repository/ProductRepository.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit8a4cdd99def997146067b1eba823ce8c::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit8a4cdd99def997146067b1eba823ce8c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8a4cdd99def997146067b1eba823ce8c::$classMap;
 
         }, null, ClassLoader::class);
     }
