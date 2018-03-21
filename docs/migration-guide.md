@@ -171,6 +171,8 @@ interface FormHandlerInterface
 }
 ```
 
+> As you will need to register Form hooks, please extends the provided AbstractFormHandler: this will register an instance of hook dispatcher automatically.
+
 > In some cases, you may want to rely on **$formDataProvider->setData()** directly, this behavior must be avoided.
 
 ### Form request handling in Controllers
