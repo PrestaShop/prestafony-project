@@ -338,14 +338,16 @@ admin_system_information:
 
 > We have decided to use YAML for services declaration and routing, don't use annotations please!
 
-And now the update of `Link` class:
+And now the update of `Link` class, adding a new entry in `$routes` list:
 
 ```php
 // classes/Link.php, in getAdminLink()
-case 'AdminInformation':
-                $sfRoute = array_key_exists('route', $sfRouteParams) ? $sfRouteParams['route'] : 'admin_system_information';
-
-                return $sfRouter->generate($sfRoute, $sfRouteParams, UrlGeneratorInterface::ABSOLUTE_URL);
+ $routes = array(
+    'AdminModulesSf' => 'admin_module_manage',
+    'AdminStockManagement' => 'admin_stock_overview',
+    ...
+    'AdminInformation' => 'admin_system_information',
+);
 ```
 
 And now, every link to "System Information" page in legacy parts will point to the new url.
