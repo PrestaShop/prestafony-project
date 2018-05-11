@@ -147,33 +147,25 @@ The idea is to uncouple the data management from Controller, so populating curre
 
 ### Form data handlers
 
-Once you are able to manage data that comes from or should be sent by forms, you need a way to build your forms (they can be themselves composed of multiple forms) and to persist the data in filesystem or database. You need to create and register a Form data handler.
-You can rely on already existing implementations, or on the interface:
+Once you are able to manage data that comes from or should be sent by forms, you need a way to build your forms (they can be themselves composed of multiple forms) and to persist the data in filesystem or database. You need to configure and register a Form data handler. You can rely on already existing implementations:
 
-```php
-interface FormHandlerInterface
-{
-    /**
-     * @return FormInterface
-     */
-    public function getForm();
+```yaml
+# /src/PrestaShopBundle/Resources/config/services/form/form_handler.yml
 
-    /**
-     * Describe what need to be done on saving the form: mostly persists the data
-     * using a form data provider, but it's also the right place to dispatch events/log something.
-     *
-     * @param array $data data retrieved from form that need to be persisted in database
-     * @throws \Exception if the data can't be handled
-     *
-     * @return void
-     */
-    public function save(array $data);
-}
+    prestashop.adapter.administration.form_handler:
+        class: 'PrestaShop\PrestaShop\Core\Form\FormHandler'
+        arguments:
+            - '@=service("form.factory").createBuilder()'
+            - '@prestashop.hook.dispatcher'
+            - '@prestashop.adapter.administration.form_provider'
+            -
+              'general': 'PrestaShopBundle\Form\Admin\AdvancedParameters\Administration\GeneralType'
+              'upload_quota': 'PrestaShopBundle\Form\Admin\AdvancedParameters\Administration\UploadQuotaType'
+              'notifications': 'PrestaShopBundle\Form\Admin\AdvancedParameters\Administration\NotificationsType'
+            - 'AdministrationPage'
 ```
 
-> As you will need to register Form hooks, please extends the provided AbstractFormHandler: this will register an instance of hook dispatcher automatically.
-
-> In some cases, you may want to rely on **$formDataProvider->setData()** directly, this behavior must be avoided.
+The two first arguments are common to every form handlers: they are used to render the form and to dispatch the related hooks. Then you need to register the Form Data Provider form the form. Then the fourth argument is an associative array that contains the names and FQCN of form types you want to render. The last argument is the name used to generate the hooks.
 
 ### Form request handling in Controllers
 
