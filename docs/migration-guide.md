@@ -16,7 +16,8 @@ This is the list of items we usually have to solve in order to complete the migr
   - [ ] Implement Forms submission
   - [ ] Implement Forms validation
   - [ ] If required, implement (request) Parameters update
-  - [ ] Check Error Handling and permissions
+  - [ ] Check Error Handling
+  - [ ] Checks permissions and demo mode constraints
   - [ ] Re-introduce hooks (and document the missing one if you can't for a good reason)
   - [ ] Complete `Link` class to map PrestaShop menu to the new page
 - [ ] Deletions
@@ -315,6 +316,78 @@ Some helpers are specific to PrestaShop to help you manage the security and the 
 * `authorizationLevel(controllerName)`: check if you are allowed - as connected user - to do the related actions
 * `langToLocale($lang)`: get the locale from a PrestaShop lang
 * `trans(key, domain, [params])`: translate a string
+
+### Manage the Security
+
+In modern pages, the permissions system that check if the user is allowed to do CRUD actions have been improved.
+
+Most of the time, you want to restrict accesses to some actions (like CREATE, READ, UPDATE, DELETE) for a specific model (like "Product", "User"). In PrestaShop Back Office, most of the resources are managed by only one Controller.
+
+So if a logged user want to manage a resource he needs to have rights to access to this controller. Sounds idiot to tell it, but for instance, to access to "Product Catalog" page you need to have READ accesses, in order to display products information. If you want to delete a product you need DELETE accesses.
+
+In a Controller for a specific Action, this is how you can restrict the accesses to specific autorizations:
+
+```php
+    use PrestaShopBundle\Security\Annotation\AdminSecurity;
+
+    /**
+     * @AdminSecurity("is_granted(['read','update', 'create','delete'], request.get('_legacy_controller')~'_')",
+     *     message="You do not have permission to update this.",
+     *     redirectRoute="foo_bar"
+     * )
+     *
+     */
+    public function fooAction(Request $request) { return new Response();}
+```
+
+#### What we have done here?
+
+Using the annotation will check if the logged user is granted to access the Action (ie the url).
+The annotation `AdminSecurity` have 5 properties:
+
+The first one is an expression evaluated that must return a boolean, here we're checking if the user have all the rights on the Controller. Accesses on PrestaShop are link to the action (Create, ...) and the related controller (ADMINPREFERENCES, ...).
+
+The second one - `message` - (optional) to configure the error message displayed to the user, if not allowed to access the action.
+
+The third one - `redirectRoute` - (optional) to configure which route name the router will use to redirect you if not allow to access the action.
+
+The fourth one - `domain` - (optional) to set the translation domain name of the message. 
+
+The fifth one - `url` - (optional) should not be used. It's used to configure an url for redirection and not rely on the router.
+
+> Once the Dashboard page will be migrated to Symfony, `url` property won't be used anymore.
+
+> You shouldn't use both `url` and `redirectRoute` at the same time, but if you do, `redirectRoute` wins!
+
+#### Manage the Demonstration Mode
+
+PrestaShop is provided with a Demonstration Mode that give logged users some rights and restrictions, no matter
+the real rights they may have to the application. To be more clear about it, this define rights at application level and not at the user level on the resources and actions of the application for the logged user.
+
+> The demonstration mode can be enabled and tested by switching the value of `_PS_MODE_DEMO_` to `true` in `config/defines.inc.php`.
+
+When an action have specific restrictions in Demonstration Mode, you can use the `DemoRestricted` annotation:
+
+```php
+    use PrestaShopBundle\Security\Annotation\DemoRestricted;
+
+    /**
+     * @DemoRestricted("route_to_be_redirected",
+     *     message="You can't do this when demo mode is enabled.",
+     *     domain="Admin.Global"
+     * )
+     *
+     */
+    public function fooAction(Request $request) { return new Response();}
+```
+
+> `message` and `domain` are both optional.
+
+#### And if I want to restrict for a specific part of my Controller?
+
+Sometimes, the restrictions depends on results of user input or an action manage both the display and the update of a resource. What if we want to allow READ action but not the UPDATE?
+
+In this case, you can rely on functions available in Controllers Helpers we have described before: `isDemoModeEnabled` and `authorizationLevel` functions.
 
 ### Routing in PrestaShop
 
