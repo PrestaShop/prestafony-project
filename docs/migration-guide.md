@@ -9,7 +9,7 @@ This is the list of items we usually have to solve in order to complete the migr
 - [ ] Creations
   - [ ] Create `PrestaShopBundle/Controller/<path>/<Your>Controller`
   - [ ] Create related actions (functions matched to URIs)
-  - [ ] Declare routing in `config/rounting/admin/routing_*.yml` file
+  - [ ] Declare routing in `config/routing/admin/routing_*.yml` file
   - [ ] Create Symfony form types for each form available in pages
   - [ ] Create and configure Javascript (using Webpack/ES6) file
   - [ ] Create every twig blocks in `views/<path>/*.html.twig`
