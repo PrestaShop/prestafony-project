@@ -54,3 +54,40 @@ class BarTest extends TestCase
 ```
 
 Unit tests should be located into `Unit` folder and follow the same path than the tested class: if a class is located into `src/Core/Foo/Baz`, the unit test should be into `tests/Unit/Core/Foo/Baz` folder.
+
+## Fonctional test creation
+
+If you create your own Modern controllers or if you plan to help us writing new tests to cover the Core of PrestaShop, you can create
+tests to cover parts of HTTP layer aka functional tests.
+
+### Using PHPUnit
+
+To create a functional test, we encourage you to rely on our own implementation of `WebTestCase`.
+
+For instance:
+
+```php
+namespace Tests\Functional\Foo;
+
+use Tests\Integration\PrestaShopBundle\Test\WebTestCase;
+
+class BarTest extends WebTestCase
+{
+    public function testSomeAction()
+    {
+        $url = '/modules/your/action';
+        /** or using the router
+         * $this->router->generate(
+         *     'route_name'
+         * );
+         */
+        $this->client->request('GET', $url);
+        
+        $response = $this->client->getResponse();
+        
+        self::assertTrue($response->isSuccessful());
+    }
+}
+```
+
+Everything from the documentation of Symfony about [functional testing](https://symfony.com/doc/3.4/testing.html#functional-tests) is available here. 
