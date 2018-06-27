@@ -35,7 +35,37 @@ Note that you must return a `Response` object, but this can be a `JsonResponse` 
 
 > This controller is the same than the ones used in Back Office. 
 
-Now we have created your controller, you need to declare a route. A route map an action of your controller to an URI.
+You must enable the autoloading for this Controller. For example using a `composer.json` file for your module.
+
+*Example using PSR-4 namespacing:*
+
+- use namespace for your Controller file
+
+```php
+// modules/your-module/controller/DemoController.php
+
+namespace MyModule\Controller;
+
+use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+```
+
+- configure composer to autoload this namespace
+
+```
+{
+  "name": "you/your-module",
+  "description": "...",
+  "autoload": {
+    "psr-4": {
+      "MyModule\\Controller\\": "controller/"
+    }
+  },
+  "type": "prestashop-module"
+}
+```
+
+
+Now we have created and loaded your controller, you need to declare a route. A route map an action of your controller to an URI.
 
 ## How to map an action of your controller to an URI?
 
@@ -55,3 +85,4 @@ your_route_name:
 > Any callable can be used to populate the ``_controller`` attribute, you don't even need to create your own controller!
   For instance, this could be a public function from your module main class.
 
+The Controller in the previous example will be available if you browse `/admin-dev/modules/your-module/demo`.
