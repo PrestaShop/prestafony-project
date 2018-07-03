@@ -236,6 +236,10 @@ All theses helpers are documented and help you to generate an HTML form from you
 
 Every templates from modern pages can be found inside `src/PrestaShopBundle/Resources/views/Admin` folder. Be careful, the organization of this templates [is about to change](https://github.com/PrestaShop/PrestaShop/pull/8489) soon (in 1.7.4) so try to keep, maintain or improve the organization.
 
+> UPDATE: PrestaShop 1.7.4 is now live. Twig templates for a page are now split between multiple
+subfolders: Forms, Blocks, Lists, Panels. This helps to keep track of what each template and subtemplate is
+responsible for.
+
 Basically, we try to order template by page and domains, keep in mind each part of template can be overriden by PrestaShop developers using modules so use templates and Twig blocks wisely to make their job easy.
 
 ## Controller/Routing
