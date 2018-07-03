@@ -170,7 +170,7 @@ The two first arguments are common to every form handlers: they are used to rend
 
 ### Form request handling in Controllers
 
-In modern pages, Controllers have or should have only one responsability: handle the User request and return a response. This is why in modern pages, controllers should be as thin as possible and rely on specific classes (services) to manage the data. As always, you can rely on already existing implementations, like in the [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/AdvancedParameters/PerformanceController.php).
+In modern pages, Controllers have or should have only one responsability: handle the User request and return a response. This is why in modern pages, controllers should be as thin as possible and rely on specific classes (services) to manage the data. As always, you can rely on already existing implementations, like in the [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/Configure/AdvancedParameters/PerformanceController.php).
 
 This is how we manage a form inside a Controller:
 
