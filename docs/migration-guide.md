@@ -170,7 +170,7 @@ The two first arguments are common to every form handlers: they are used to rend
 
 ### Form request handling in Controllers
 
-In modern pages, Controllers have or should have only one responsability: handle the User request and return a response. This is why in modern pages, controllers should be as thin as possible and rely on specific classes (services) to manage the data. As always, you can rely on already existing implementations, like in the [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/AdvancedParameters/PerformanceController.php).
+In modern pages, Controllers have or should have only one responsability: handle the User request and return a response. This is why in modern pages, controllers should be as thin as possible and rely on specific classes (services) to manage the data. As always, you can rely on already existing implementations, like in the [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/Configure/AdvancedParameters/PerformanceController.php).
 
 This is how we manage a form inside a Controller:
 
@@ -232,9 +232,13 @@ To sum up how it works, the controller send an instance of `FormView` to Twig an
     </div>
     {{ form_end(logsByEmailForm) }}
 ```
-All theses helpers are documented and help you to generate an HTML form from your `FormView` object, with the right markup to be rendered by the PrestaShop UI Kit. As for now, a lot of forms have already been migrated and rendered so you can rely and improve existing implementations.
+All theses helpers are documented and help you to generate an HTML form from your `FormView` object, with the right markup to be rendered by the PrestaShop UI Kit. As for now, a lot of forms have already been migrated and rendered so you can rely on and improve existing implementations.
 
 Every templates from modern pages can be found inside `src/PrestaShopBundle/Resources/views/Admin` folder. Be careful, the organization of this templates [is about to change](https://github.com/PrestaShop/PrestaShop/pull/8489) soon (in 1.7.4) so try to keep, maintain or improve the organization.
+
+> UPDATE: PrestaShop 1.7.4 is now live. Twig templates for a page are now split between multiple
+subfolders: Forms, Blocks, Lists, Panels. This helps to keep track of what each template and subtemplate is
+responsible for.
 
 Basically, we try to order template by page and domains, keep in mind each part of template can be overriden by PrestaShop developers using modules so use templates and Twig blocks wisely to make their job easy.
 
@@ -388,7 +392,7 @@ In this case, you can rely on functions available in Controllers Helpers we have
 In order to map an Action to an url, we need to register a route and update a legacy class called `Link`.
 Routes are declared in `src/PrestaShopBundle/Resources/config/admin` folder, using a `routing_{domain}.yml` file and imported in `routing_admin.yml` file.
 
-Nothing special here except that you *must* declare a property called `_legacy_controller` with the old name of controller you are migrating in order to make the class `Link` aware of it: this class is reponsible of generating urls in the legacy parts of PrestaShop.
+Nothing special here except that you *must* declare a property called `_legacy_controller` with the old name of controller you are migrating in order to make the class `Link` aware of it: this class is responsible of generating urls in the legacy parts of PrestaShop.
 
 Let's see what we have done when we have migrated the "System Information" page inside the "Configure >Advanced Parameters" section:
 
