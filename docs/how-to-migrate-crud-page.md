@@ -54,8 +54,7 @@ You don't have to create the Grid Definition by yourself but rely instead on a G
 This factory must implement the `GridDefinitionFactoryInterface` interface which has only one method: `create()`.
 It is recommended to use the abstract factory class provided by the component, which gives you access to the translator and implements re-usable functions for you:
 
-NOTE: every column must be defined in `getColumns()` method. Column can be as simple as `DataColumn` to display field from row or
-it can be `BulkActionColumn` to display checkbox with value from row. 
+NOTE: every column must be defined in `getColumns()` method. Column can be as simple as `DataColumn` to display field from row or it can be `BulkActionColumn` to display checkbox with value from row. 
 
 ```php
 use PrestaShop\PrestaShop\Core\Grid\Action\GridAction;
