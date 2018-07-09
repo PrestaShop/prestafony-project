@@ -483,6 +483,29 @@ Some hooks are directly rendered in templates, because PrestaShop developers wan
 }) }}
 ```
 
+## Write modern Javascript assets using Webpack for PrestaShop
+
+PrestaShop uses Webpack to build and bundle javascript assets in PrestaShop.
+
+> Root folder for javascript scripts is `/admin-dev/themes/new-theme`.
+
+### Install dependencies
+
+Run `$ npm install` to install required node modules
+
+### Build Javascript files with PRODUCTION environment
+
+You can build either assets either for environment DEV or PRODUCTION. In DEV environment, files are easier to read and debug. However when you submit the Pull Request,
+assets must be built for PRODUCTION.
+
+Run `$ npm run build` to build assets for PRODUCTION.
+
+### Troubleshooting
+
+> if `npm install` fails with error: `Failed at the ... postinstall script.`
+
+If your version of node is 9 or 10, try using node version 8.
+
 # Deletions
 
 Now everything is migrated, refactored, extracted to specific classes and works like a charm, it's time to remove the migrated parts:
