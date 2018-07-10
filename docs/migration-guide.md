@@ -14,6 +14,7 @@ In order to migrate a legacy page, we need to migrate 3 parts of the application
     - [Form data providers](#form-data-providers)
     - [Form data handlers](#form-data-handlers)
     - [Form request handling in Controllers](#form-request-handling-in-controllers)
+      - [Summary with a schema](#summary-with-a-schema)
     - [Render the form view, Twig templating](#render-the-form-view-twig-templating)
   - [Controller/Routing](#controllerrouting)
     - [Modern/Symfony Controllers](#modernsymfony-controllers)
@@ -29,6 +30,10 @@ In order to migrate a legacy page, we need to migrate 3 parts of the application
   - [Dispatch a hook in a modern Controller](#dispatch-a-hook-in-a-modern-controller)
   - [Dispatch a hook in a specific class](#dispatch-a-hook-in-a-specific-class)
   - [Dispatch/Render a hook in Twig templates](#dispatchrender-a-hook-in-twig-templates)
+  - [Write modern Javascript assets using Webpack for PrestaShop](#write-modern-javascript-assets-using-webpack-for-prestashop)
+    - [Install dependencies](#install-dependencies)
+    - [Build Javascript files with PRODUCTION environment](#build-javascript-files-with-production-environment)
+    - [Troubleshooting](#troubleshooting)
 - [Deletions](#deletions)
 
 
