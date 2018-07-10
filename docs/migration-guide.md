@@ -500,6 +500,8 @@ assets must be built for PRODUCTION.
 
 Run `$ npm run build` to build assets for PRODUCTION.
 
+> If you need to see instant changes/build on files, use the following command: `$ npm run watch`
+
 ### Troubleshooting
 
 > if `npm install` fails with error: `Failed at the ... postinstall script.`
