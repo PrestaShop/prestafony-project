@@ -204,6 +204,8 @@ So, basically three steps:
 [See this schema](../images/Modern-prestashop-form-page.jpg) which sums up how Form Handlers, Form Builders, Controllers and Data Providers
 are wired together.
 
+> Note a XML file importable in services like [draw.io](https://draw.io) is [available](../src/Grid-build-schema.xml).
+
 ### Render the form view, Twig templating
 
 The rendering of forms in Twig is already [described](https://symfony.com/doc/current/form/rendering.html) in Symfony documentation. We use our own [Form theme](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Resources/views/Admin/TwigTemplateForm/prestashop_ui_kit.html.twig) that contains specific input and markup for PrestaShop UI Kit, you can see it as a customized version of Bootstrap 4 form theme of Symfony 3, though we don't rely on it directly right now.
