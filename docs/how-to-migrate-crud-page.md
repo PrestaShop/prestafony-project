@@ -214,3 +214,7 @@ Yes, we don't render directly the Grid Data but a typed View to be used in Twig 
 if we need to retrieve the grid directly from Vuejs/React app.
 
 So basically we can imagine later to implement "GridDataFactory->createJsView()" which could return a well formated JSON object.
+
+## Summary as a schema
+
+![Grid schema](../images/Grid-build-schema.png)
