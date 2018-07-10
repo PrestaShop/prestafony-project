@@ -23,24 +23,20 @@ You can follow these steps to easily add a KPI row to a modern page :
     ```php
     public function showSettingsAction(Request $request)
     {
-        $legacyController = $request->attributes->get('_legacy_controller');
-        
         // Create the KPI row factory service
-        $kpiRowFactory = $this->get('prestashop.core.kpi_row.factory.translations_page');
+        $kpiRowFactory = $this->get('prestashop.core.kpi_row.factory.your_page');
 
         return [
-            'layoutTitle' => $this->trans('Translations', 'Admin.Navigation.Menu'),
-            'enableSidebar' => true,
-            'help_link' => $this->generateSidebarLink($legacyController),
-            
-            // Assign the built KPI row to twig
+            // Assign the built KPI row to the view
             'kpiRow' => $kpiRowFactory->build(),
+            ...
         ];
     }
     ```
 
-* The final step is to render the KPI row in your twig template, using `renderKpiRow` method from `CommonController` and passing it the previously assigned `kpiRow` variable:
+* The final step is to render the KPI row with Twig, using `renderKpiRow` method from `CommonController` and passing it to the previously assigned `kpiRow` variable:
     ```twig
+    {# It works also in Admin module controllers #}
     {% block translations_kpis_row %}
         <div class="row">
             {{ render(controller(
