@@ -284,7 +284,7 @@ Symfony Controllers should be thin by default and have only one responsability: 
 * Validation
 * etc...
 
-You can take a look at [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/AdvancedParameters/PerformanceController.php) for a good implementation, but at [ProductController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/ProductController.php) for something you should avoid at all costs.
+You can take a look at [PerformanceController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/Configure/AdvancedParameters/PerformanceController.php) for a good implementation, but at [ProductController](https://github.com/PrestaShop/PrestaShop/blob/develop/src/PrestaShopBundle/Controller/Admin/ProductController.php) for something you should avoid at all costs.
 
 Once the Controller is created, it should contains "Actions". Actions are methods of Controllers (also called Controllers sometimes) mapped to a route, and with the responsability of returning a Response. You may avoid to create another functions, this probably means you should extract this code into external classes.
 
