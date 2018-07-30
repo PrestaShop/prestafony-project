@@ -1,6 +1,6 @@
 # How to migrate a CRUD page of Back Office?
 
-Looking PrestaShop Back Office, most of the pages are organized the same way.
+Looking at PrestaShop Back Office, most of the pages are organized the same way.
 
 We can already see 2 categories of pages that represent almost 90% of back office:
 
@@ -9,12 +9,12 @@ We can already see 2 categories of pages that represent almost 90% of back offic
 
 CRUD pages provide a lot of features.
 
-Access to a lot of data, ordered by column: these data can be simple (text) or more complex (display a thumbnail).
+Access to a lot of data, ordered by column: this data can be simple (text) or more complex (display a thumbnail).
 These columns are ordered and can be altered by developers: we can change position, add or remove columns for instance.
 
 All tables are paginated and can be filtered by value for a specific column, for instance re-organize the value ordered by decreasing price.
 
-More, all tables can be filtered using criteria: every column is a criterion and may be used to build the data.
+More, all tables can be filtered using criteria: each column may define it's filter and can be used to build the data.
 
 Finally, all tables are provided with common actions: export, access to SQL manager, ... and common bulk actions.
 
@@ -43,28 +43,30 @@ Let's see what we need to do to migrate a CRUD-based page, in step-by-step tutor
 
 The Grid Definition stores the structural information about your Grid:
 
-* The *Grid name* is the human readable and translatable name
-* The *Grid identifier* is a unique key that you can use to select the right grid in case or you have multiple ones in a page with the same name
-* The *Grid Columns* needs to be a ColumnCollection instance, you can see them as public properties of your grid (for now)
-* The *Grid actions* are the related actions available for this grid: in PrestaShop it's common to have "export" or "access to sql manager" actions.
-* The *Row actions* are the related actions available for an entry of this list of data: in PrestaShop it's common to be able to edit/access or delete the entry
-* The *Bulk actions* are the actions available for a bunch of selectable entries: a bulk delete or a bulk edition for instance.
+* The *name* is the human readable and translatable name
+* The *id* is a unique key that you can use to identify grid in page or hook
+* The *columns* defines columns for grid, it needs to be an instance of ColumnCollection
+* The *grid actions* are the related actions available for this grid: in PrestaShop it's common to have "export" or "access to sql manager" actions.
+* The *bulk actions* are the actions available for a bunch of selectable entries: a bulk delete or a bulk activate for instance.
 
-You don't have to create the Grid Definition by yourself byt rely instead on a Grid Definition Factory.
+You don't have to create the Grid Definition by yourself but rely instead on a Grid Definition Factory.
 
-This factory must implements the `GridDefinitionFactoryInterface` interface which have only one method: `create()`.
-You'd better use the abstract class provided by the component, which give you access to the translator and already implement re-usable functions for you:
+This factory must implement the `GridDefinitionFactoryInterface` interface which has only one method: `create()`.
+It is recommended to use the abstract factory class provided by the component, which gives you access to the translator and implements re-usable functions for you:
+
+NOTE: every column must be defined in `getColumns()` method. Column can be as simple as `DataColumn` to display field from row or it can be `BulkActionColumn` to display checkbox with value from row. 
 
 ```php
-use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
+use PrestaShop\PrestaShop\Core\Grid\Action\GridAction;
 use PrestaShop\PrestaShop\Core\Grid\Action\GridActionCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\BulkActionColumn;
+use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
 
 final class FooGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
     // required
-    protected function getIdentifier()
+    protected function getId()
     {
         return 'foo';
     }
@@ -77,32 +79,44 @@ final class FooGridDefinitionFactory extends AbstractGridDefinitionFactory
     // required
     protected function getColumns()
     {
-        return ColumnCollection::fromArray([
-            [
-                'identifier' => 'id',
-                'name' => $this->trans('ID', [], 'Admin.Global'),
-                'filter_form_type' => TextType::class
-            ],
-            ...
-        ]);
+        return (new ColumnCollection())
+            ->add((new BulkActionColumn('bulk_action'))
+                ->setOptions([
+                    'bulk_field' => 'id_log',
+                ])
+            )
+            ->add((new DataColumn('id_log'))
+                ->setName($this->trans('ID', [], 'Global.Actions'))
+                ->setOptions([
+                    'field' => 'id_log',
+                ])
+            )
+        ;
     }
 
-    // null by default
+    // null by default and should not be implemented if grid does not define actions
     protected function getGridActions()
     {
-        return GridActionCollection::fromArray([
-            [
-                'identifier' => 'delete',
-                'name' => $this->trans('Erase all', [], 'Admin.Advparameters.Feature'),
-                'icon' => 'delete_forever',
-                'renderer' => '<a href="foo/delete">Delete</a>',
-            ],
-            [
-                'identifier' => 'ps_refresh_list',
-                'name' => $this->trans('Refresh list', [], 'Admin.Advparameters.Feature'),
-                'icon' => 'refresh',
-            ],
-        ]);
+        return (new GridActionCollection())
+            ->add(new GridAction(
+                'common_refresh_list',
+                $this->trans('Refresh list', [], 'Admin.Advparameters.Feature'),
+                'refresh',
+                'simple'
+            ))
+            ->add(new GridAction(
+                'common_show_query',
+                $this->trans('Show SQL query', [], 'Admin.Actions'),
+                'code',
+                'simple'
+            ))
+            ->add(new GridAction(
+                'common_export_sql_manager',
+                $this->trans('Export to SQL Manager', [], 'Admin.Actions'),
+                'storage',
+                'simple'
+            ))
+        ;
     }
 }
 ```
@@ -114,7 +128,7 @@ As you can imagine, the responsibility of Grid Data Provider is to provide the G
 The only method available of `GridDataProviderInterface` is `getData` which returns an instance of `GridData`.
 A GridData is an immutable object used to store and retrieve the GridData, so if you want to alter this data, you must do it in Grid Data Provider *before* the GridData creation.
 
-There is a good news here: you don't need to create your own as we provide one: the `GridDataProvider`. 
+There is a good news here: you don't need to create your own as we provide one: the `DoctrineGridDataProvider`. 
 
 ### The Grid Query Builder
 
@@ -146,7 +160,7 @@ interface DoctrineQueryBuilderInterface
 }
 ```
 
-Once you have defined the right Query Builder for your data, le's configure the grid and use it in a controller.
+Once you have defined the right Query Builder for your data, let's configure the grid and use it in a controller.
 
 ## Grid services declaration
 
@@ -155,18 +169,19 @@ Only 3 services must be declared: the *Grid Factory*, the *Grid Definition Facto
 # In src/PrestaShopBundle/Resources/config/services/core/grid.yml
 
 # Grid Factory
-prestashop.core.grid.foo_factory:
+prestashop.core.grid.factory.foo:
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
-        - '@prestashop.core.grid.definition.factory.foo_definition'
+        - '@prestashop.core.grid.definition.factory.foo'
         - '@prestashop.core.grid.data_provider.foo'
         - '@form.factory'
         - '@prestashop.hook.dispatcher'
 
 # Grid Definition Factory
-prestashop.core.grid.definition.factory.foo_definition:
+prestashop.core.grid.definition.factory.foo:
     class: 'PrestaShop\PrestaShop\Core\Grid\Definition\Factory\FooGridDefinitionFactory'
     parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
 
 ## Grid Data Provider
 prestashop.core.grid.data_provider.foo:
@@ -191,12 +206,15 @@ class FooController extends FrameworkBundleAdminController
      */
     public function indexAction(SearchCriteria $searchCriteria)
     {
-        $gridFooFactory = $this->get('prestashop.core.grid.foo_factory');
-
+        $gridFooFactory = $this->get('prestashop.core.grid.factory.foo');
         $fooGrid = $gridLogFactory->createUsingSearchCriteria($searchCriteria);
         
+        // presenter will convert grid to plain array
+        $gridPresenter = $this->get('prestashop.core.grid.presenter.grid_presenter');
+        $presentedGrid = $gridPresenter->present($fooGrid);
+        
         return $this->render('@Foo/Bar/pageWithGrid.html.twig', [
-            'gridView' => $fooGrid->createView(),
+            'grid' => $presentedGrid,
         ]);
     }
 }
@@ -205,15 +223,8 @@ class FooController extends FrameworkBundleAdminController
 And in the related template:
 
 ```twig
-    {{ include('@PrestaShop/Admin/Common/Grid/grid_panel.html.twig', {'gridView': gridView }) }}
+    {{ include('@PrestaShop/Admin/Common/Grid/grid_panel.html.twig', {'grid': grid }) }}
 ```
-
-#### (optional) A Grid View? WTF!
-
-Yes, we don't render directly the Grid Data but a typed View to be used in Twig for now, and to ease the work
-if we need to retrieve the grid directly from Vuejs/React app.
-
-So basically we can imagine later to implement "GridDataFactory->createJsView()" which could return a well formated JSON object.
 
 ## Summary as a schema
 
