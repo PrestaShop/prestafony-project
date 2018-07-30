@@ -99,6 +99,17 @@ Macros/functions are specific to the modern pages to help with recurrent blocks:
 
 Finally, legacy templates use [Bootstrap 3](https://getbootstrap.com/docs/3.3/) when modern pages use the [PrestaShop UI Kit](http://build.prestashop.com/prestashop-ui-kit/) that relies on [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/), so you'll need to update some markup, especially CSS classes accordingly.
 
+_Warning_: be careful to reuse the same translated strings in order to keep the translation working.
+
+Example:
+```php
+    // legacy controller
+    $this->trans('Before activating the webservice, you must be sure to: ', array(), 'Admin.Advparameters.Help')
+```
+must become
+```twig
+    {{ 'Before activating the webservice, you must be sure to: '|trans({}, 'Admin.Advparameters.Help') }}
+```
 # Forms
 
 ## Legacy forms management
