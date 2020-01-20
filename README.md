@@ -1,5 +1,10 @@
 # Prestafony project: modern PrestaShop with Symfony
 
+---
+This repository has been archived. Follow the migration project here: [Migration project board](https://github.com/PrestaShop/PrestaShop/projects/3). 
+
+---
+
 This repository contains docs and modules to help you migrate PrestaShop using Symfony 3 PHP framework.
 
 ## Can I contribute?
